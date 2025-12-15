@@ -7,6 +7,8 @@ UENUM(BlueprintType)
 enum class EInterpType_Enum : uint8
 {
     Linear,
-    Exponential,
+    EaseIn,
+    EaseOut,
+    EaseInOut,
     ConstantSpeed
 };

@@ -10,8 +10,10 @@ An AI controller for smooth turning that allows AIs to rotate toward target acto
 - Fully editable via blueprint defaults
   - Customizable interpolation speed
   - Customizable interpolation type:
-    - Exponential (default, most natural)
     - Linear
+    - EaseIn
+    - EaseOut (default)
+    - EaseInOut
     - Constant speed (degrees/sec)
   - Customizable degrees per second
   - Eye level height offset for the AI

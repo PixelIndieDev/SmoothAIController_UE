@@ -27,7 +27,7 @@ ASmoothAIController::ASmoothAIController()
     PrimaryActorTick.bCanEverTick = true;
     EHasFocusTarget = EAI_FocusTarget_Enum::NoFocus;
     SmoothFocusInterpSpeed = 4.0f;
-    InterpType = EInterpType_Enum::Exponential;
+    InterpType = EInterpType_Enum::EaseOut;
     DegreesPerSecond = 180.0f;
 
     Self_EyeLevelHeightOffsetRelative = 60.0f;
@@ -105,9 +105,21 @@ FRotator ASmoothAIController::InterpRotation(const FRotator& Current, const FRot
         return FMath::Lerp(Current, Target, DeltaSeconds * SmoothFocusInterpSpeed);
     }
 
-    case EInterpType_Enum::Exponential:
+    case EInterpType_Enum::EaseIn:
+    {
+        const float alpha = FMath::Clamp(DeltaSeconds * SmoothFocusInterpSpeed, 0.0f, 1.0f);
+        return FMath::InterpEaseIn(Current, Target, alpha, 1.0f);
+    }
+
+    case EInterpType_Enum::EaseOut:
     {
         return FMath::RInterpTo(Current, Target, DeltaSeconds, SmoothFocusInterpSpeed);
+    }
+
+    case EInterpType_Enum::EaseInOut:
+    {
+        const float alpha = FMath::Clamp(DeltaSeconds * SmoothFocusInterpSpeed, 0.0f, 1.0f);
+        return FMath::InterpEaseInOut(Current, Target, alpha, 1.0f);
     }
 
     case EInterpType_Enum::ConstantSpeed:
@@ -140,7 +152,7 @@ void ASmoothAIController::RandomizeSmoothFocusSettings(float MinInterpSpeed, flo
         InterpType = AllowedInterpTypes[Index];
     }
     else {
-        InterpType = EInterpType_Enum::Exponential;
+        InterpType = EInterpType_Enum::EaseOut;
     }
 }
 
